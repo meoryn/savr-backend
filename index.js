@@ -24,9 +24,11 @@ app.post("/login", async (req, res) => {
       if (error) {
         return res.status(401).json({ error: error.message });
       }
-    
-      res.json({ user: data.user, session: data.session });
 
+      const session = data.session
+      const jwt = session?.access_token
+    
+      res.json({ user: data.user, session: data.session });      
     });
 
 
@@ -50,6 +52,45 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+
+app.post("/transactions", async (req, res) => {
+  const {user_id, account_id, category_id, amount, type } = req.body;
+  
+  const refreshToken = req.headers["x-refresh-token"];
+
+
+  // Token auslesen
+  const token = req.headers.authorization?.split(" ")[1]
+  if (!token) return res.status(401).json({ error: "Missing token" })
+
+  // Session setzen
+  const { error: sessErr } = await supabase.auth.setSession({ access_token: token, refresh_token: refreshToken })
+  if (sessErr) return res.status(401).json({ error: "Invalid token" })
+
+
+  
+  const { data, error } = await supabase
+  .from('transaction')
+  .insert([
+    {
+      user_id: user_id,
+      account_id: account_id,      
+      category_id: category_id,
+      amount: amount,
+      type: type
+    },
+  ])
+
+  console.log(data)
+  if (error) {
+    console.error("Insert-Error:", error);
+    return res.status(400).json({ error: error.message });
+  }
+
+  res.status(201);
+  res.send("Success");
+});
+
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(` Server running at port ${port}`);
+});
