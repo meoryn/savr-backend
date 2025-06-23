@@ -1,16 +1,29 @@
 import 'dotenv/config';
 import { createClient } from '@supabase/supabase-js';
 
-const express = require('express')
+import express from 'express';
+
+import cors from 'cors';
 const app = express()
-const port = 3000
+const port = 4000
 
 const supabaseUrl = process.env.supabaseURL;
 const supabaseKey = process.env.supabasekey;
 
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+const allowedOrigins = [
+  'http://localhost:3000',
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
 app.use(express.json());
+
 
 
 app.post("/login", async (req, res) => {
