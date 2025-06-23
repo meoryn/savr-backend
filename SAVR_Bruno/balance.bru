@@ -1,0 +1,17 @@
+meta {
+  name: balance
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:3000/balance
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "account_id": "86dafe0a-e3ed-4c1c-8240-53b7d67c0607"
+  }
+}
