@@ -3,6 +3,8 @@ import { supabase } from './supabaseClient.js';
 import { userMap } from './AccountIDHandler.js';
 const router = express.Router();
 
+
+
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -12,15 +14,13 @@ router.post("/login", async (req, res) => {
   })
 
   if (error) {
-    return res.status(401).json({ error: error.message });
+    return res.json({ error: error.message });
   }
 
-
-
-  const { data: accountData, error: accountError } = await supabase
+  //account_id zur userMap hinzufügen
+  const { data: accountData, error: accountError } = await supabase   
     .from("account")
     .select("account_id")
-
   userMap.set(data.user.id, accountData[0].account_id);
 
   if (accountError) {
@@ -30,17 +30,20 @@ router.post("/login", async (req, res) => {
 });
 
 
+
 router.post("/register", async (req, res) => {
-  const { email, password, id } = req.body;
+  const { email, password} = req.body;
+
   const { data, error } = await supabase.auth.signUp({
     email: email,
     password: password,
   })
 
   if (error) {
-    return res.status(401).json({ error: error.message });
+    return res.json({ error: error.message });
   }
-
+  
+  //account_id in die account table einfügen
   const { data: transactionInsertData, error: transactionInsertError } = await supabase
     .from('account')
     .insert([
