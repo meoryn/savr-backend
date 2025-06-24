@@ -10,6 +10,7 @@ import logoutRoute from './logoutRoute.js';
 import monthlyReport from './monthlyReport.js';
 import expensesRoute from './expensesRoute.js';
 import availableMonthsRoute from './availableMonths.js';
+import usedCategoriesRoute from './usedCategories.js';
 import { supabase } from './supabaseClient.js';
 
 const app = express()
@@ -51,6 +52,8 @@ app.use("/", monthlyReport);
 app.use("/", expensesRoute);
 
 app.use("/", availableMonthsRoute);
+
+app.use("/", usedCategoriesRoute);
 
 app.listen(port, () => {
   console.log(` Server running at port ${port}`);
