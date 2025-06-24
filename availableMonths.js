@@ -31,14 +31,22 @@ router.post('/availableMonths', async (req, res) => {
 
     const { data, error } = await supabase
         .from("monthly_report")
-        .select("transaction_date", { distinct: true})
+        .select("transaction_date")
         .eq("account_id", account_id)
         .order("transaction_date");
+
+    const transactionDates = data.map(item => item.transaction_date);
+
+    const uniqueTransactionDatesSet = new Set(transactionDates);
+
+    const uniqueData = Array.from(uniqueTransactionDatesSet).map(date => ({ transaction_date: date }));
+
+
 
     if (error) {
         res.json(error);
     }
-    res.json(data);
+    res.json(uniqueData);
 
 })
 
