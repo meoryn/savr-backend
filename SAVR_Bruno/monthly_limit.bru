@@ -5,7 +5,15 @@ meta {
 }
 
 post {
-  url: http://localhost:3000
-  body: none
+  url: http://localhost:3000/monthly_limit
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "account_id": "89986de1-4c5a-4429-85cd-4eb11dcc8f54",
+    "category_id": "08d1c0e8-c5e2-4966-a579-230eb1f195db",
+    "maximum": 230
+  }
 }
