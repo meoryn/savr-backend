@@ -34,7 +34,9 @@ router.post('/expenses', async (req, res) => {
         .select("sum, transaction_date")
         .eq("account_id", account_id)
         .eq("type", "expense")
-        .eq("category_name", category_name);
+        .eq("category_name", category_name)
+        .order("transaction_date");
+
 
     if (error) {
         res.json(error);

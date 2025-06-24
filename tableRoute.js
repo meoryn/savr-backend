@@ -32,7 +32,7 @@ router.post("/table", async (req, res) => {
         .select(selectedColumns ? selectString : "*")
 
 
-    res.set("x-refresh-token", userData.session.refresh_token);
+    res.set("new-x-refresh-token", userData.session.refresh_token);
     res.set("jwt", userData.session.access_token);
 
 
