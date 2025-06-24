@@ -6,10 +6,10 @@ import balanceRoute from './balanceRoute.js';
 import transactionRoute from './transactionRoute.js';
 import tableRoute from './tableRoute.js';
 import monthly_limitRoute from './monthly_limitRoute.js';
-import logoutRoute from './logoutRoute.js'
-import monthlyReport from './monthlyReport.js'
-import expensesRoute from './expensesRoute.js'
-
+import logoutRoute from './logoutRoute.js';
+import monthlyReport from './monthlyReport.js';
+import expensesRoute from './expensesRoute.js';
+import availableMonthsRoute from './availableMonths.js';
 import { supabase } from './supabaseClient.js';
 
 const app = express()
@@ -28,10 +28,6 @@ app.use(cors({
 app.use(express.json());
 
 
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
 
 app.use("/", authRoutes);
 
@@ -53,6 +49,8 @@ app.use("/", tableRoute);
 app.use("/", monthlyReport);
 
 app.use("/", expensesRoute);
+
+app.use("/", availableMonthsRoute);
 
 app.listen(port, () => {
   console.log(` Server running at port ${port}`);
