@@ -3,7 +3,7 @@ import { supabase } from './supabaseClient.js';
 const router = express.Router();
 
 
-router.get('/balance', async (req, res) => {
+router.post('/balance', async (req, res) => {
 
   const user_id = req.body.user_id;
 
