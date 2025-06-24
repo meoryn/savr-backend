@@ -31,7 +31,7 @@ router.post('/availableMonths', async (req, res) => {
 
     const { data, error } = await supabase
         .from("monthly_report")
-        .select("transaction_date")
+        .select("transaction_date", { distinct: true})
         .eq("account_id", account_id)
         .order("transaction_date");
 
