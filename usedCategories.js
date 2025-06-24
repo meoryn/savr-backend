@@ -6,7 +6,7 @@ const router = express.Router();
 
 
 router.post('/usedCategories', async (req, res) => {
-    const user_id = req.body.user_id;
+    const {user_id, type} = req.body;
     const refreshToken = req.headers["x-refresh-token"];
     const token = req.headers.authorization?.split(" ")[1]
     if (!token) return res.status(401).json({ error: "Missing token" })
@@ -33,6 +33,7 @@ router.post('/usedCategories', async (req, res) => {
         .from("monthly_report")
         .select("category_name")
         .eq("account_id", account_id)
+        .eq("type", type)
 
 
     const categoryNames = data.map(item => item.category_name);
