@@ -18,6 +18,7 @@ router.get('/balance', async (req, res) => {
   const { error: sessErr } = await supabase.auth.setSession({ access_token: token, refresh_token: refreshToken })
   if (sessErr) return res.status(401).json({ error: "Invalid token" })
 
+
   try {     //Aktuelle Balance holen
     let { data: balance, error } = await supabase
       .from('account')

@@ -5,20 +5,17 @@ import { userIDtoAccountID } from './AccountIDHandler.js';
 const router = express.Router();
 
 
-router.get("/table", async (req, res) => {
+router.post("/table", async (req, res) => {
     const { selectedColumns, userId, tableName } = req.body;
 
     const refreshToken = req.headers["x-refresh-token"];
 
-    console.log(selectedColumns);
-    console.log(tableName);
 
     let selectString;
     if (selectedColumns) {
         selectString = selectedColumns.reduce(function (pre, next) {
             return pre + ", " + next;
         });
-        console.log(selectString);
     }
 
 
@@ -27,7 +24,7 @@ router.get("/table", async (req, res) => {
     if (!token) return res.status(401).json({ error: "Missing token" })
 
     // Session setzen
-    const { error: sessErr } = await supabase.auth.setSession({ access_token: token, refresh_token: refreshToken })
+    const { data: userData, error: sessErr } = await supabase.auth.setSession({ access_token: token, refresh_token: refreshToken })
     if (sessErr) return res.status(401).json({ error: "Invalid token", detailed: sessErr })
 
     const { data, error } = await supabase.
@@ -35,11 +32,17 @@ router.get("/table", async (req, res) => {
         .select(selectedColumns ? selectString : "*")
 
 
+    res.set("x-refresh-token", userData.session.refresh_token);
+    res.set("jwt", userData.session.access_token);
+
+
     res.status(201);
-    if(error) {
+    if (error) {
         res.json(error);
     }
     res.json(data);
+
+
 });
 
 export default router;

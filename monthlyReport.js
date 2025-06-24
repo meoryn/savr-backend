@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 
-router.get('/monthlyReport', async (req, res) => {
+router.post('/monthlyReport', async (req, res) => {
     const user_id = req.body.user_id;
     const refreshToken = req.headers["x-refresh-token"];
     const token = req.headers.authorization?.split(" ")[1]
@@ -32,7 +32,8 @@ router.get('/monthlyReport', async (req, res) => {
     const { data, error } = await supabase
         .from("monthly_report")
         .select("sum, type, transaction_date, category_name")
-        .eq("account_id", account_id);
+        .eq("account_id", account_id)
+        .order("transaction_date");
 
     if (error) {
         res.json(error);
