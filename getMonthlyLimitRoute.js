@@ -45,7 +45,7 @@ router.post('/getMonthlyLimit', async (req, res) => {
         console.log("Fehler bei der Anfrage an monthly_limit nach dem Maximum: " + errorData);
         res.json(errorData);
     } 
-    res.json(checkData);
+    res.json(checkData[0].maximum);
 
 
 })
