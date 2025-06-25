@@ -40,7 +40,7 @@ router.post('/monthlySpendings', async (req, res) => {
     if (error) {
         res.json(error);
     }
-    res.json(data);
+    res.json(data[0].sum);
 })
 
 
