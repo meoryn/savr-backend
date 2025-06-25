@@ -13,8 +13,9 @@ import availableMonthsRoute from './availableMonths.js';
 import usedCategoriesRoute from './usedCategories.js';
 import recurringEntriesRoute from './recurringEntriesRoute.js';
 import monthlySpendingsRoute from './monthlySpendings.js';
-import { supabase } from './supabaseClient.js';
-
+import getMonthlyLimitRoute from './getMonthlyLimitRoute.js';
+//import swaggerUi from 'swagger-ui-express';
+//import swaggerDocument from './swagger.json'
 const app = express()
 const port = 4000
 
@@ -60,6 +61,9 @@ app.use("/", usedCategoriesRoute);
 app.use("/", recurringEntriesRoute);
 
 app.use("/", monthlySpendingsRoute);
+
+app.use("/", getMonthlyLimitRoute);
+
 
 app.listen(port, () => {
   console.log(` Server running at port ${port}`);

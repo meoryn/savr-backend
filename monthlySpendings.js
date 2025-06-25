@@ -5,7 +5,6 @@ const router = express.Router();
 
 const fullDate = new Date().toISOString().slice(0, 7);
 
-console.log(fullDate);
 
 router.post('/monthlySpendings', async (req, res) => {
     const {user_id, category_name} = req.body
@@ -42,7 +41,6 @@ router.post('/monthlySpendings', async (req, res) => {
         res.json(error);
     }
     res.json(data);
-
 })
 
 

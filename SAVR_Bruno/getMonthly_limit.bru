@@ -1,11 +1,11 @@
 meta {
-  name: usedCategories
+  name: getMonthly_limit
   type: http
-  seq: 11
+  seq: 15
 }
 
 post {
-  url: http://localhost:4000/usedCategories
+  url: http://localhost:4000/getMonthlyLimit
   body: json
   auth: inherit
 }
@@ -13,6 +13,6 @@ post {
 body:json {
   {
     "user_id" : "95609032-b3c7-4ba5-a45c-6763eae207f1",
-    "type" : "expense"
+    "category_id" : "525223b5-4e9b-47dd-8443-b2eb87c8974c"
   }
 }
