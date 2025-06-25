@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/monthly_limit', async (req, res) => {
 
-    const { user_id, category_id, maximum } = req.body;
+    const { user_id, category_name, maximum } = req.body;
 
     const refreshToken = req.headers["x-refresh-token"];
     const token = req.headers.authorization?.split(" ")[1]
@@ -19,6 +19,19 @@ router.post('/monthly_limit', async (req, res) => {
     // Token auslesen
 
 
+    //category_name auf category_id mappen
+
+    const { data: categoryData, error: categoryError } = await supabase
+        .from("category")
+        .select("category_id")
+        .eq("name", category_name);
+
+    const category_id = categoryData[0].category_id;
+    if (categoryError) {
+        console.log("Fehler bei der Anfrage an category nach der passenden ID: " + errorData);
+        res.json(categoryError);
+    }
+
     //Checken ob Limit bereits vorhanden
     const { data: checkData, error: errorData } = await supabase
         .from("monthly_limit")
@@ -26,7 +39,6 @@ router.post('/monthly_limit', async (req, res) => {
         .eq("user_id", user_id)
         .eq("category_id", category_id);
 
-    console.log(checkData);
     if (errorData) console.log("Fehler bei der Anfrage an monthly_limit, ob ein Limit bereits vorhanden ist : " + errorData);
 
     if (checkData.length == 0) { //Wenn es noch nicht vorhanden ist

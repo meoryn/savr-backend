@@ -13,8 +13,6 @@ router.post('/balance', async (req, res) => {
   // Token auslesen
   const token = req.headers.authorization?.split(" ")[1]
   if (!token) return res.status(401).json({ error: "Missing token" })
-  console.log(token);
-  console.log(refreshToken);
   // Session setzen
   const { error: sessErr } = await supabase.auth.setSession({ access_token: token, refresh_token: refreshToken })
   if (sessErr) return res.status(401).json({ error: "Invalid token" })

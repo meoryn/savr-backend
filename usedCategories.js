@@ -6,7 +6,7 @@ const router = express.Router();
 
 
 router.post('/usedCategories', async (req, res) => {
-    const {user_id, type} = req.body;
+    const { user_id, type } = req.body;
     const refreshToken = req.headers["x-refresh-token"];
     const token = req.headers.authorization?.split(" ")[1]
     if (!token) return res.status(401).json({ error: "Missing token" })
@@ -36,18 +36,36 @@ router.post('/usedCategories', async (req, res) => {
         .eq("type", type)
 
 
+    //Duplikate entfernen
     const categoryNames = data.map(item => item.category_name);
-
     const uniqueCategoryNamesSet = new Set(categoryNames);
 
     const uniqueData = Array.from(uniqueCategoryNamesSet).map(category_name => ({ category_name: category_name }));
-    
+
+    //Überprüfen, ob mindestens ein weiterer Eintrag mit der Category_id vorhanden ist.
+
+    let finalData = []
+    for (const entry in uniqueData) {
+        console.log(uniqueData[entry].category_name);
+        const { data: checkData, error: errorData } = await supabase
+            .from("monthly_report")
+            .select("*")
+            .eq("category_name", uniqueData[entry].category_name)
+            .eq("account_id", account_id)
+            .eq("type", type);
+        
+        if(checkData.length > 1) {
+            finalData.push(uniqueData[entry])
+        }
+    }
+
+
 
 
     if (error) {
         res.json(error);
     }
-    res.json(uniqueData);
+    res.json(finalData);
 
 })
 
