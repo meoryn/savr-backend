@@ -7,7 +7,7 @@ const fullDate = new Date().toISOString().slice(0, 7);
 
 
 router.post('/monthlySpendings', async (req, res) => {
-    const {user_id, category_name} = req.body
+    const { user_id, category_name } = req.body
     const refreshToken = req.headers["x-refresh-token"];
     const token = req.headers.authorization?.split(" ")[1]
     if (!token) return res.status(401).json({ error: "Missing token" })
@@ -36,11 +36,17 @@ router.post('/monthlySpendings', async (req, res) => {
         .eq("transaction_date", fullDate)
         .eq("type", "expense");
 
-    
+
     if (error) {
         res.json(error);
     }
-    res.json(data[0].sum);
+    if (data) {
+        if (data[0]) {
+            res.json(data[0].sum);
+        } else {
+            res.send("No spendings found for given month");
+        }
+    }
 })
 
 
