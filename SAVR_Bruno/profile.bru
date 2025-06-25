@@ -1,0 +1,19 @@
+meta {
+  name: profile
+  type: http
+  seq: 17
+}
+
+post {
+  url: http://localhost:4000/edit_profile
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user_id" : "95609032-b3c7-4ba5-a45c-6763eae207f1",
+    "username": "maxij",
+    "full_name": "jjmax"
+  }
+}

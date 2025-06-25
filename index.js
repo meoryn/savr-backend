@@ -14,8 +14,7 @@ import usedCategoriesRoute from './usedCategories.js';
 import recurringEntriesRoute from './recurringEntriesRoute.js';
 import monthlySpendingsRoute from './monthlySpendings.js';
 import getMonthlyLimitRoute from './getMonthlyLimitRoute.js';
-//import swaggerUi from 'swagger-ui-express';
-//import swaggerDocument from './swagger.json'
+import profileRoute from './profileRoute.js';
 const app = express()
 const port = 4000
 
@@ -38,6 +37,7 @@ app.use("/", authRoutes);
 
 app.use("/", transactionRoute);
 
+app.use("/", profileRoute);
 
 app.use("/", balanceRoute);
 

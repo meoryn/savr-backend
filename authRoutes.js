@@ -18,7 +18,7 @@ router.post("/login", async (req, res) => {
   }
 
   //account_id zur userMap hinzufügen
-  const { data: accountData, error: accountError } = await supabase   
+  const { data: accountData, error: accountError } = await supabase
     .from("account")
     .select("account_id")
   userMap.set(data.user.id, accountData[0].account_id);
@@ -32,7 +32,7 @@ router.post("/login", async (req, res) => {
 
 
 router.post("/register", async (req, res) => {
-  const { email, password} = req.body;
+  const { email, password } = req.body;
 
   const { data, error } = await supabase.auth.signUp({
     email: email,
@@ -42,17 +42,31 @@ router.post("/register", async (req, res) => {
   if (error) {
     return res.json({ error: error.message });
   }
-  
+
   //account_id in die account table einfügen
-  const { data: transactionInsertData, error: transactionInsertError } = await supabase
+  const { data: accountInsertData, error: accountInsertError } = await supabase
     .from('account')
     .insert([
       { user_id: data.user.id, account_name: data.user.email },
     ])
     .select()
 
-  if (transactionInsertError) {
-    console.log("Error inserting transaction" + transactionInsertError);
+  if (accountInsertError) {
+    console.log("Error inserting transaction" + accountInsertError);
+  }
+
+  //user_id in die profile table einfügen
+  const { data: profileInsertData, error: profileInsertError } = await supabase
+    .from("profile")
+    .insert([
+      { user_id: data.user.id,
+        username: email
+      },
+    ])
+    .select()
+
+  if (profileInsertError) {
+    console.log(profileInsertError);
   }
 
   const { data: accountData, error: accountError } = await supabase
