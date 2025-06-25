@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 
-router.get('/logout', async (req, res) => {
+router.post('/logout', async (req, res) => {
     const refreshToken = req.headers["x-refresh-token"];
 
     // Token auslesen
@@ -17,6 +17,7 @@ router.get('/logout', async (req, res) => {
 
 const {error } = await supabase.auth.signOut();
 console.log(error);
+res.status(200);
 res.send("Success");
 
 })

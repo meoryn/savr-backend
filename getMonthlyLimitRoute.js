@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/getMonthlyLimit', async (req, res) => {
 
-    const { user_id, category_id } = req.body;
+    const { user_id, category_name } = req.body;
 
     const refreshToken = req.headers["x-refresh-token"];
     const token = req.headers.authorization?.split(" ")[1]
@@ -21,6 +21,20 @@ router.post('/getMonthlyLimit', async (req, res) => {
     }
     // Token auslesen
 
+
+    //category_name auf category_id mappen
+    
+    const { data: categoryData, error: categoryError} = await supabase
+        .from("category")
+        .select("category_id")
+        .eq("name", category_name);
+
+    const category_id = categoryData[0].category_id;
+        if (categoryError) {
+        console.log("Fehler bei der Anfrage an category nach der passenden ID: " + errorData);
+        res.json(categoryError);
+    } 
+    
     const { data: checkData, error: errorData } = await supabase
         .from("monthly_limit")
         .select("maximum")
@@ -32,8 +46,6 @@ router.post('/getMonthlyLimit', async (req, res) => {
         res.json(errorData);
     } 
     res.json(checkData);
-
-
 
 
 })
