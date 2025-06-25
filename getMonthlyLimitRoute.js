@@ -23,11 +23,10 @@ router.post('/getMonthlyLimit', async (req, res) => {
 
     const { data: checkData, error: errorData } = await supabase
         .from("monthly_limit")
-        .select("*")
+        .select("maximum")
         .eq("user_id", user_id)
         .eq("category_id", category_id);
 
-    console.log(checkData);
     if (errorData) {
         console.log("Fehler bei der Anfrage an monthly_limit nach dem Maximum: " + errorData);
         res.json(errorData);
