@@ -44,7 +44,7 @@ router.post('/monthlySpendings', async (req, res) => {
         if (data[0]) {
             res.json(data[0].sum);
         } else {
-            res.send("No spendings found for given month");
+            res.send("0");
         }
     }
 })
