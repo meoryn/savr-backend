@@ -1,11 +1,45 @@
 Die Savr-API ist unter Port 4000 erreichbar, und benötigt auf allen Endpoints(bis auf Login und Register) einen access_token in Form eines JWT-Tokens und einen Refresh-Tokens im folgenden Format:
 
+---
+
+# Installation Guide
+
+Um das Savr-backend zu starten, sind folgende Schritte zu befolgen:
+
+1. **Node.js installieren:** Stelle sicher, dass eine aktuelle Version von Node.js auf dem System installiert ist. Getestet wurde das Projekt mit Version 23.11.
+    
+2. **.env Datei hinzufügen:** Lege deine `.env`-Datei in das Projektverzeichnis von `savr-backend`. Diese Datei enthält wichtige Umgebungsvariablen für die Anwendung.
+
+3. **Backend starten:** Navigiere im Terminal zum `savr-backend`-Verzeichnis und führe den folgenden Befehl aus:
+    ```
+    node index.js
+    ```
+
+---
+
+
+# Authentifizierung
+cd 
+Die Api benötigt auf allen Endpoints(bis auf Login und Register) einen access_token in Form eines JWT-Tokens und einen Refresh-Tokens im folgenden Format:
 #### Header
 
-| Name            | Beschreibung          |
+| Name            | Inhalt                |
 | --------------- | --------------------- |
 | authorization   | Bearer {access_token} |
 | x-refresh-token | {refresh_tokenx}      |
+
+
+**Bei falsch gesetzten Tokens bekommt man bei sämtlichen Endpoints folgendes zurück:**
+
+{
+  "error": "Invalid token",
+  "detailed": {
+    "isAuthError": true,
+    "name": "AuthApiError",
+    "status": 400,
+    "code": "refresh_token_not_found"
+  }
+}
 
 
 # login
@@ -233,18 +267,7 @@ leerer Body
 
 #### Response
 
-"Success", oder bei falsch gesetzten Tokens ein Error
-**Beispiel:** 
-
-{
-  "error": "Invalid token",
-  "detailed": {
-    "isAuthError": true,
-    "name": "AuthApiError",
-    "status": 400,
-    "code": "refresh_token_not_found"
-  }
-}
+"Success"
 
 
 # monthly_limit
@@ -254,16 +277,17 @@ leerer Body
 * **Beschreibung**: Setzt ein monatliches Limit für einen Nutzer
 #### Request
 
-| Name        | Datentyp | Beschreibung                       |
-| ----------- | -------- | ---------------------------------- |
-| user_id     | UUID     | Eindeutige Kennung des Benutzers   |
-| category_id | UUID     | Eindeutige Kennung einer Kategorie |
-| maximum     | Integer  | Das zu setzende Limit              |
+| Name          | Datentyp | Beschreibung                     |
+| ------------- | -------- | -------------------------------- |
+| user_id       | UUID     | Eindeutige Kennung des Benutzers |
+| category_name | String   | Name der Kategorie               |
+| maximum       | Integer  | Das zu setzende Limit            |
 **Beispiel:** 
 
 {
-  "user_id" : "95609032-b3c7-4ba5-a45c-6763eae207f1",
-  "category_id" : "08d1c0e8-c5e2-4966-a579-230eb1f195db"
+  "user_id": "95609032-b3c7-4ba5-a45c-6763eae207f1",
+  "category_name": "Gesundheit",
+  "maximum": 210
 }
 
 #### Response
@@ -345,17 +369,10 @@ Die Response ist ein Array bestehend aus Objekten in folgendem Format:
 
 #### Response
 
-
-| Name | Datentyp | Beschreibung                          |
-| ---- | -------- | ------------------------------------- |
-| sum  | Integer  | Die summierten Ausgaben für das Monat |
+Die Response entspricht der Summe des derzeitigen Monats.
 
 **Beispiel:** 
-[
-  {
-    "sum": 162
-  }
-]
+162
 
 
 # table
@@ -448,7 +465,7 @@ Success
 
 * **URL:** `http://localhost:4000/usedCategories
 * **Methode**: `POST`
-* **Beschreibung**: Gibt ein Array der Kategorien zurück, in denen der Benutzer bereits Transaktionen getätigt hat.
+* **Beschreibung**: Gibt ein Array der Kategorien zurück, in denen der Benutzer bereits Transaktionen getätigt hat. (liefert nur Einträge mit mindestens 2 Einträgen, da ansonsten keine Graphen erstellt werden können)
 #### Request
 
 | Name    | Datentyp | Beschreibung                              |
@@ -482,3 +499,61 @@ Die Response ist ein Array bestehend aus Objekten in folgendem Format:
     "category_name": "Freizeit"
   }
 ]
+
+# profile
+
+* **URL:** `http://localhost:4000/profile
+* **Methode**: `POST`
+* **Beschreibung**: Liefert die Profildaten(Username, Bürgerlichername) zurück
+#### Request
+
+| Name    | Datentyp | Beschreibung                              |
+| ------- | -------- | ----------------------------------------- |
+| user_id | UUID     | Eindeutige Kennung des Benutzers          |
+
+
+**Beispiel:** 
+
+{
+  "user_id" : "a5841e1f-e3e4-4270-910f-5c58fa6972f7"
+}
+
+#### Response
+
+
+| Name      | Datentyp | Beschreibung           |
+| --------- | -------- | ---------------------- |
+| username  | String   | Username des Benutzers |
+| full_name | String   | Bürgerlicher Name      |
+**Beispiel:** 
+{
+  "username": "MaxMus",
+  "full_name": "Max Mustermann"
+}
+
+# edit_profile
+
+* **URL:** `http://localhost:4000/edit_profile
+* **Methode**: `POST`
+* **Beschreibung**: Bearbeitet die Profildaten(Username, Bürgerlichername)
+#### Request
+
+| Name      | Datentyp | Beschreibung                     |
+| --------- | -------- | -------------------------------- |
+| user_id   | UUID     | Eindeutige Kennung des Benutzers |
+| username  | String   | gewünschter Benutzername         |
+| full_name | String   | gewünschter Bürgerlicher Name    |
+
+
+**Beispiel:** 
+
+{
+  "user_id": "a5841e1f-e3e4-4270-910f-5c58fa6972f7",
+  "username": "Test456",
+  "full_name": "Test789"
+}
+
+#### Response
+
+"Success"
+**Beispiel:** 
