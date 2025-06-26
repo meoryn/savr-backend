@@ -13,7 +13,6 @@
     "@supabase/supabase-js": "^2.49.4",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^5.1.0",
-    "swagger-ui-express": "^5.0.1"
+    "express": "^5.1.0"
   }
 }

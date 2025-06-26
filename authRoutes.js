@@ -59,7 +59,8 @@ router.post("/register", async (req, res) => {
   const { data: profileInsertData, error: profileInsertError } = await supabase
     .from("profile")
     .insert([
-      { user_id: data.user.id,
+      {
+        user_id: data.user.id,
         username: email
       },
     ])
@@ -84,4 +85,26 @@ router.post("/register", async (req, res) => {
 
 })
 
+router.post('/change_password', async (req, res) => {
+  const new_password = req.body.new_password;
+  const refreshToken = req.headers["x-refresh-token"];
+  const token = req.headers.authorization?.split(" ")[1]
+  if (!token) return res.status(401).json({ error: "Missing token" })
+
+  // Session setzen
+  const { error: sessErr } = await supabase.auth.setSession({ access_token: token, refresh_token: refreshToken })
+  if (sessErr) return res.status(401).json({ error: "Invalid token", detailed: sessErr })
+
+
+  const { data: changeData, error: changeError } = await supabase
+    .auth
+    .updateUser({ password: new_password });
+
+  if (changeError) {
+    res.json(changeError);
+  } else {
+    res.json(changeData);
+  }
+
+})
 export default router;
