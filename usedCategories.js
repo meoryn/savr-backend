@@ -12,7 +12,7 @@ router.post('/usedCategories', async (req, res) => {
     if (!token) return res.status(401).json({ error: "Missing token" })
 
     // Session setzen
-    const { error: sessErr } = await supabase.auth.setSession({ access_token: token, refresh_token: refreshToken })
+    const { data: userData, error: sessErr } = await supabase.auth.setSession({ access_token: token, refresh_token: refreshToken })
     if (sessErr) return res.status(401).json({ error: "Invalid token", detailed: sessErr })
 
     let account_id = userIDtoAccountID(user_id);
