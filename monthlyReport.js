@@ -47,6 +47,9 @@ router.post('/monthlyReport', async (req, res) => {
 
   console.log('Fetched Data', data);
 
+
+      res.set("new-x-refresh-token", userData.session.refresh_token);
+    res.set("jwt", userData.session.access_token);
   if (error) {
     res.json(error);
   }

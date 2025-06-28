@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 router.post("/edit_profile", async (req, res) => {
-    const { user_id, username, full_name} = req.body;
+    const { user_id, username, full_name } = req.body;
 
     const refreshToken = req.headers["x-refresh-token"];
 
@@ -37,7 +37,7 @@ router.post("/edit_profile", async (req, res) => {
 });
 
 router.post("/profile", async (req, res) => {
-    const { user_id} = req.body;
+    const { user_id } = req.body;
 
     const refreshToken = req.headers["x-refresh-token"];
 
@@ -55,10 +55,14 @@ router.post("/profile", async (req, res) => {
         .select("username, full_name")
         .eq("user_id", user_id);
 
+
+    res.set("new-x-refresh-token", userData.session.refresh_token);
+    res.set("jwt", userData.session.access_token);
+    
     if (selectError) {
         console.log(selectError);
     } else {
-    res.json(selectData[0]);
+        res.json(selectData[0]);
 
     }
 

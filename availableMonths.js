@@ -41,7 +41,8 @@ router.post('/availableMonths', async (req, res) => {
 
     const uniqueData = Array.from(uniqueTransactionDatesSet).map(date => ({ transaction_date: date }));
 
-
+    res.set("new-x-refresh-token", userData.session.refresh_token);
+    res.set("jwt", userData.session.access_token);
 
     if (error) {
         res.json(error);

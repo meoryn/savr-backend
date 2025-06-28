@@ -36,17 +36,19 @@ router.post('/monthlySpendings', async (req, res) => {
     .eq("transaction_date", fullDate)
     .eq("type", "expense");
 
+  res.set("new-x-refresh-token", userData.session.refresh_token);
+  res.set("jwt", userData.session.access_token);
 
-    if (error) {
-        res.json(error);
+  if (error) {
+    res.json(error);
+  }
+  if (data) {
+    if (data[0]) {
+      res.json(data[0].sum);
+    } else {
+      res.send("0");
     }
-    if (data) {
-        if (data[0]) {
-            res.json(data[0].sum);
-        } else {
-            res.send("0");
-        }
-    }
+  }
 })
 
 

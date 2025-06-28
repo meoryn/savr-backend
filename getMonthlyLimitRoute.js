@@ -45,6 +45,9 @@ router.post('/getMonthlyLimit', async (req, res) => {
         console.log("Fehler bei der Anfrage an monthly_limit nach dem Maximum: " + errorData);
         res.json(errorData);
     }
+
+        res.set("new-x-refresh-token", userData.session.refresh_token);
+    res.set("jwt", userData.session.access_token);
     if (checkData.length > 0) res.json(checkData[0].maximum);
     else {
         res.send("0");

@@ -26,7 +26,8 @@ router.post('/balance', async (req, res) => {
 
   balance = balance[0].balance;
 
-
+    res.set("new-x-refresh-token", userData.session.refresh_token);
+    res.set("jwt", userData.session.access_token);
   if (error) {
     console.error('Fehler beim Abrufen der Balance:', error.message);
     res.send(error);

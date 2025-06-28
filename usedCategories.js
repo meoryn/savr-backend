@@ -59,7 +59,8 @@ router.post('/usedCategories', async (req, res) => {
         }
     }
 
-
+    res.set("new-x-refresh-token", userData.session.refresh_token);
+    res.set("jwt", userData.session.access_token);
 
 
     if (error) {

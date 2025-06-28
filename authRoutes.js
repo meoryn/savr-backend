@@ -106,5 +106,8 @@ router.post('/change_password', async (req, res) => {
     res.json(changeData);
   }
 
+  res.set("new-x-refresh-token", userData.session.refresh_token);
+  res.set("jwt", userData.session.access_token);
+
 })
 export default router;
